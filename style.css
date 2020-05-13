@@ -113,6 +113,14 @@ html {
     border-radius: 5px;
 }
 
+.list-item-completed {
+    background-color: var(--color-primary);
+}
+
+.list-item-completed >  .list-item-close{
+    color: var(--color-white);
+}
+
 .list-item-text {
     flex: 1;
     text-transform: capitalize;

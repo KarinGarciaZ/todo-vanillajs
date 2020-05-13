@@ -17,33 +17,40 @@ const events = () => {
     }
     
     todoButton.onclick = e => {
-        if ( todoInput.value && e.target.value.length < 29) {
+        if ( todoInput.value && todoInput.value.length < 29) {
             addTodo(todoInput.value);
         }
     }
-    
-    document.addEventListener('click',function(e){
-        if (e.target && e.target.className === 'list-item-close'){
-            const key = e.target.getAttribute("data-key");
-            todos.splice(key, 1);
-            render();
-         }
-    });
 }
 
 const addTodo = value => {
-    todos.push(value);
+    const id = Math.random() * 10000;
+    todos.push({id, value, completed: false});
     todoInput.value = '';
     render();
 }
 
+const toggleTask = key => {
+    const index = todos.findIndex(todo => key === todo.id);
+    if(index > -1) {
+        todos[index].completed = !todos[index].completed;
+        render();
+    }
+}
+
+const removeTodo = key => {
+    const index = todos.findIndex(todo => key === todo.id);
+    todos.splice(index, 1);
+    render();
+}
+
 const render = () => {
-    const listOfTodos = todos.map((todo, key) => {
+    const listOfTodos = todos.map(todo => {
         return `
-            <div class="list-item">
-                <span class="list-item-text">${todo}</span>
-                <span class="list-item-close" data-key="${key}">X</span>
-            </div>
+            <li class="list-item ${todo.completed? 'list-item-completed':''}" onclick="toggleTask(${todo.id})">
+                <span class="list-item-text">${todo.value}</span>
+                <span class="list-item-close" onclick="removeTodo(${todo.id})">X</span>
+            </li>
         `
     });
 
